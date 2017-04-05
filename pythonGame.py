@@ -8,13 +8,11 @@ from pygame.locals import *
 import math
 from moleThread import MoleThread
 
-
 windowWidth = 1300
 windowHeight = 680
 imageWidth = 106
 imageHeight = 116
 grass_color = (0,130,64)
-
 locations = []
 threads = []
 for i in range(0, (int)(math.floor(windowHeight / (10 +imageHeight)))):
@@ -99,7 +97,6 @@ def main():
         print('Your command line arguments should be input as follows <number of moles> <max moles at at time>\n')
 
     #check to see if there are too many moles to display
-    print(len(locations))
     if numberOfMoles >= len(locations):
         print('That is too many moles to display. Please use less than ' + (str)(len(locations)) + ' moles')
         exit(1)
@@ -108,9 +105,7 @@ def main():
         print('Your maximum number of moles is greater than the amount of moles on screen')
 
     signal.signal(signal.SIGINT, signal_handler)
-
     semaphore = threading.BoundedSemaphore(value=maxMoles)
-
     game(numberOfMoles, semaphore)
 
 main()
