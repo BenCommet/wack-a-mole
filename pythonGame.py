@@ -7,6 +7,9 @@ import pygame
 from pygame.locals import *
 import math
 from moleThread import MoleThread
+from threading import Thread
+import Tkinter
+import tkMessageBox
 
 windowWidth = 1300
 windowHeight = 680
@@ -65,6 +68,10 @@ def makeLives():
 
     return returnGroup
 
+def playAgain():
+    return tkMessageBox.askyesno("Play Again","Would you like to play again?")
+
+
 '''
 * This function creates the pygame object and handles the main game loop
 @param{numberOfMoles} - maximum number of moles/threads we will make
@@ -79,7 +86,7 @@ def game(numberOfMoles, semaphore):
     pygame.init()
     # set screen width/height and caption
     size = [windowWidth, windowHeight]
-    screen = pygame.display.set_mode(size)
+    screen = pygame.display.set_mode(size, FULLSCREEN)
 
     pygame.display.set_caption('My Game')
     myfont = pygame.font.SysFont("monospace", 48)
@@ -92,7 +99,6 @@ def game(numberOfMoles, semaphore):
     clock = pygame.time.Clock()
 
     threads = startThreads(numberOfMoles, semaphore, moleGroup, lifeGroup, livesSemaphore, livesRemaining, deathGroup)
-    print('you made it!')
     # Loop until the user clicks close button
     done = False
     while done == False:
@@ -107,15 +113,19 @@ def game(numberOfMoles, semaphore):
                 #     threads[i].stop()
                 done = True
         # write game logic here
-        if(len(lives) == 0):
-            print('rekts')
-            exit()
         for mole in moleGroup:
             if mole.rect.collidepoint(x, y):
                 if mole.isUp:
                     mole.image = pygame.image.load("empty.png").convert_alpha()
                     playerScore += 1
                     mole.isUp = False
+
+        if(len(lives) == 0):
+            if playAgain():
+                done = True
+                main()
+            else:
+                done = True
         # clear the screen before drawing
         screen.fill((grass_color))
         # write draw code here
@@ -125,11 +135,12 @@ def game(numberOfMoles, semaphore):
         screen.blit(scoretext, (5, 10))
         pygame.display.update()
 
-
         clock.tick(60)
 
     # close the window and quit
     pygame.quit()
+
+
 '''
 * Main function for our program
 '''

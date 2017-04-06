@@ -66,10 +66,9 @@ class MoleThread(threading.Thread):
         self.molesUp.release()
         if self.moleSprite.isUp:
             self.moleSprite.image = pygame.image.load("empty.png").convert_alpha()
-        print("feesh")
         if self.moleSprite.isUp:
-            print('aquiring')
             self.livesSemaphore.acquire()
             self.removeLife()
+        #prevent the user from being able to click on the invisible sprite and get points
+        self.moleSprite.isUp = False
         self.run()
-        
