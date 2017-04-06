@@ -11,16 +11,20 @@ from threading import Thread
 import Tkinter
 import tkMessageBox
 
+#height of windows and images
 windowWidth = 1300
 windowHeight = 680
 imageWidth = 106
 imageHeight = 116
 lifeWidth = 27
 lifeHeight = 29
-grass_color = (0,130,64)
+
+#these arrays hold information we need globally
 locations = []
 threads = []
 lives = []
+#Create enough locations to fill up the screen with moles without going
+#out of bounds
 for i in range(0, (int)(math.floor(windowHeight / (10 +imageHeight)))):
     for j in range(0, (int)(math.floor(windowWidth/ (10 + imageWidth)))):
         locations.append([j * (10 + imageWidth), i * (10 + imageHeight)])
@@ -67,7 +71,9 @@ def makeLives():
         lives.append(life)
 
     return returnGroup
-
+'''
+* This function will spawn a dialog box that determines if the user wishes to play again
+'''
 def playAgain():
     return tkMessageBox.askyesno("Play Again","Would you like to play again?")
 
@@ -79,6 +85,8 @@ def playAgain():
 at one time.
 '''
 def game(numberOfMoles, semaphore):
+    #color of the grass
+    grass_color = (0,130,64)
     livesSemaphore = threading.BoundedSemaphore(9)
     livesRemaining = 10
     playerScore = 0
@@ -86,7 +94,7 @@ def game(numberOfMoles, semaphore):
     pygame.init()
     # set screen width/height and caption
     size = [windowWidth, windowHeight]
-    screen = pygame.display.set_mode(size, FULLSCREEN)
+    screen = pygame.display.set_mode(size)
 
     pygame.display.set_caption('My Game')
     myfont = pygame.font.SysFont("monospace", 48)
@@ -128,7 +136,7 @@ def game(numberOfMoles, semaphore):
                 done = True
         # clear the screen before drawing
         screen.fill((grass_color))
-        # write draw code here
+        # draw our sprite groups and text objects
         moleGroup.draw(screen)
         lifeGroup.draw(screen)
         deathGroup.draw(screen)
